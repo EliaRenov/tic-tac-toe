@@ -1,5 +1,7 @@
 'use strict';
 
+let currentTurn = 1;
+
 let gameBoard;
 
 let HTMLs = {
@@ -13,6 +15,7 @@ HTMLs.newGameBtn.addEventListener('click', newGame)
 function newGame() {
     resetBoard();
     render();
+    highlightCurrentPlayer()
 }
 
 function resetBoard() {
@@ -52,6 +55,23 @@ function createSquare() {
 
 function switchPlayer() {
     currentTurn === 1 ? currentTurn = 2 : currentTurn = 1;
+    highlightCurrentPlayer()
+}
+
+let playerHTMLs = document.querySelectorAll('.player')
+let player1Title = playerHTMLs[0]
+let player2Title = playerHTMLs[1]
+console.log({player1Title, player2Title})
+
+function highlightCurrentPlayer() {
+    console.log(currentTurn)
+    if (currentTurn === 1) {
+        player1Title.classList.add('current')
+        player2Title.classList.remove('current')
+    } else if (currentTurn === 2) {
+        player2Title.classList.add('current')
+        player1Title.classList.remove('current')
+    }
 }
 
 function markSquare(square, i) {
@@ -95,6 +115,10 @@ function gameEnds() {
     squares.forEach(square => {
         square.replaceWith(square.cloneNode(true))
     })
+
+    // Remove current player highlighting
+    player1Title.classList.remove('current')
+    player2Title.classList.remove('current')
 }
 
 function checkForThree() {
@@ -219,7 +243,7 @@ function render() {
 
 newGame()
 
-let currentTurn = 1;
+
 
 
 

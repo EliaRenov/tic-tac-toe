@@ -17,6 +17,7 @@
     gap: 1rem;
     grid-column: 2 / 3;
     grid-row: 1 / 4;
+    border-radius: 50px;
 }
 
 .board .square {
@@ -25,19 +26,40 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
+}
+
+.board .square:nth-of-type(1){
+    border-top-left-radius: 15px;
+}
+
+.board .square:nth-of-type(3) {
+    border-top-right-radius: 15px;
+}
+
+.board .square:nth-of-type(7) {
+    border-bottom-left-radius: 15px;
+}
+
+.board .square:nth-of-type(9) {
+    border-bottom-right-radius: 15px;
+}
+
+.x, .o {
+    user-select: none;
 }
 
 .x {
-    color: #44BBA4;
-    font-size: 10rem;
-    user-select: none;
-    margin-top: -20px;
+    font-size: 11rem;
+    font-weight: bold;
+    color: rgba(17, 165, 9, 0.7);
+
 }
 
 .o {
-    color: #B74F6F;
-    font-size: 10rem;
-    user-select: none;
+    color: #ff004c;
+    font-size: 11rem;
+    font-weight: bold;
 }
 
 .board .tie-square {
@@ -62,6 +84,11 @@
 }
 
 body {
+    background-image: url("images/background-image.jpg");
+    /* background-size: contain; */
+    background-repeat: no-repeat;
+    /* background-size: auto; */
+    background-position: center;
     display: grid;
     grid-template-columns: 1fr 3fr;
     grid-template-rows: 1fr 1fr 1fr;
@@ -74,6 +101,7 @@ body {
 .player {
     text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
     color: rgb(255, 255, 255);
+    opacity: 0.3;
     font-size: 4rem;
     display: flex;
     gap: 5rem;
@@ -82,20 +110,30 @@ body {
     user-select: none;
 }
 
+.player.two {
+    align-self: flex-start;
+}
+
+.current {
+    color: rgb(255, 0, 0);
+    text-shadow: 1px 1px 2px red, 0 0 1em #00eaff, 0 0 0.2em #00eaff;
+    opacity: 1;
+}
+
 
 /* Credit: Zak on Codepen */
 
-.current-bg {
+.rainbow-bg {
     animation: current-bg 10s linear;
     animation-iteration-count: infinite;
 }
 
-.current {
+.rainbow {
     animation: current 10s linear;
     animation-iteration-count: infinite;
 }
 
-@keyframes current-bg {
+@keyframes rainbow-bg {
     100%,0%{
         background-color: rgb(255,0,0);
     }
@@ -134,7 +172,7 @@ body {
     }
 }
 
-@keyframes current {
+@keyframes rainbow {
     100%,0%{
         color: rgb(255,0,0);
     }
