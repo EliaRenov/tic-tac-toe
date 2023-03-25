@@ -11,12 +11,12 @@
     box-sizing: border-box;
     background-color: black;
     border: 30px solid black;
-    margin: 0 auto;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
     grid-column: 2 / 3;
+    grid-row: 1 / 4;
 }
 
 .board .square {
@@ -50,22 +50,128 @@
 
 
 
-
 .new-game-btn {
-    width: 250px;
+    width: 315px;
     height: 100px;
     grid-column: 1 / 2;
-    grid-row: 1;
+    grid-row: 3;
     align-self: center;
-    justify-self: center;
+    justify-self: flex-end;
     font-size: 2rem;
+  
 }
 
 body {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    column-gap: 10rem;
+    height: 100vh;
+    align-items: center;
+    box-sizing: border-box;
 }
 
+.player {
+    text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+    color: rgb(255, 255, 255);
+    font-size: 4rem;
+    display: flex;
+    gap: 5rem;
+    align-items: center;
+    justify-content: flex-end;
+    user-select: none;
+}
+
+
+/* Credit: Zak on Codepen */
+
+.current-bg {
+    animation: current-bg 10s linear;
+    animation-iteration-count: infinite;
+}
+
+.current {
+    animation: current 10s linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes current-bg {
+    100%,0%{
+        background-color: rgb(255,0,0);
+    }
+    8%{
+        background-color: rgb(255,127,0);
+    }
+    16%{
+        background-color: rgb(255,255,0);
+    }
+    25%{
+        background-color: rgb(127,255,0);
+    }
+    33%{
+        background-color: rgb(0,255,0);
+    }
+    41%{
+        background-color: rgb(0,255,127);
+    }
+    50%{
+        background-color: rgb(0,255,255);
+    }
+    58%{
+        background-color: rgb(0,127,255);
+    }
+    66%{
+        background-color: rgb(0,0,255);
+    }
+    75%{
+        background-color: rgb(127,0,255);
+    }
+    83%{
+        background-color: rgb(255,0,255);
+    }
+    91%{
+        background-color: rgb(255,0,127);
+    }
+}
+
+@keyframes current {
+    100%,0%{
+        color: rgb(255,0,0);
+    }
+    8%{
+        color: rgb(255,127,0);
+    }
+    16%{
+        color: rgb(255,255,0);
+    }
+    25%{
+        color: rgb(127,255,0);
+    }
+    33%{
+        color: rgb(0,255,0);
+    }
+    41%{
+        color: rgb(0,255,127);
+    }
+    50%{
+        color: rgb(0,255,255);
+    }
+    58%{
+        color: rgb(0,127,255);
+    }
+    66%{
+        color: rgb(0,0,255);
+    }
+    75%{
+        color: rgb(127,0,255);
+    }
+    83%{
+        color: rgb(255,0,255);
+    }
+    91%{
+        color: rgb(255,0,127);
+    }
+}
 
 
 .seen {
@@ -134,3 +240,4 @@ body {
     border-radius: 15px;
     border: none;
 }
+

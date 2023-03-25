@@ -1,19 +1,18 @@
 'use strict';
 
-let gameBoard = [
-    null, null, null,
-    null, null, null,
-    null, null, null
-];
+let gameBoard;
 
-let boardHTML = document.querySelector('.board');
+let HTMLs = {
+    boardHTML: document.querySelector('.board'),
+    newGameBtn: document.querySelector('.new-game-btn'),
+    squares: document.querySelectorAll(".square"),
+}
 
-let newGameBtn = document.querySelector('.new-game-btn')
-newGameBtn.addEventListener('click', newGame)
+HTMLs.newGameBtn.addEventListener('click', newGame)
 
 function newGame() {
-    resetBoard()
-    render()
+    resetBoard();
+    render();
 }
 
 function resetBoard() {
@@ -25,8 +24,8 @@ function resetBoard() {
 }
 
 function emptyBoard() {
-    while (boardHTML.firstChild) {
-        boardHTML.firstChild.remove()
+    while (HTMLs.boardHTML.firstChild) {
+        HTMLs.boardHTML.firstChild.remove()
     }
 }
 
@@ -69,9 +68,6 @@ function checkTie() {
     if (!(gameBoard.includes(null))) return 'tie'
 }
 
-// function wins(winner) {
-//     console.log(`${winner} WINS`)
-// }
 
 function markSquareTie(square) {
     square.classList.add('tie-square')
@@ -86,93 +82,126 @@ function markSquaresWin(square1, square2, square3) {
 function declareTie() {
     let squares = document.querySelectorAll(".square");
     squares.forEach(square => markSquareTie(square));
-    squares.forEach(square => console.log(square));
 }
 
 function declareWinner(status) {
+    console.log(`DECLARE WINNER: ${status}`)
     let squares = document.querySelectorAll(".square")
     markSquaresWin(squares[status[1]], squares[status[2]], squares[status[3]])
+}
 
+function gameEnds() {
+    let squares = document.querySelectorAll(".square");
+    squares.forEach(square => {
+        square.replaceWith(square.cloneNode(true))
+    })
+}
+
+function checkForThree() {
+    /*
+        # # #
+        # # #
+        # # #
+        */
+       if (gameBoard[0]) {
+           /*
+           X X X
+           # # #
+           # # #
+           */
+          if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2]) return [gameBoard[0],0,1,2]
+          /*
+          X # #
+        X # #
+        X # #
+        */
+       if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6]) return [gameBoard[0],0,3,6]
+       /*
+       X # #
+       # X #
+       # # X
+       */
+      if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8]) return [gameBoard[0],0,4,8]
+    }
+    
+    if (gameBoard[1]) {
+        /*
+        # X #
+        # X #
+        # X #
+        */
+       if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7]) return [gameBoard[1],1,4,7]
+    }
+    
+    if(gameBoard[2]) {
+        /*
+        # # X
+        # # X
+        # # X
+        */
+       if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8]) return [gameBoard[2],2,5,8]
+
+    /*
+        # # X
+        # X #
+        X # #
+        */   
+       if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6]) return [gameBoard[2],2,4,6]
+    }
+    
+    
+    if(gameBoard[3]) {
+        /*
+        # # #
+        X X X
+        # # #
+        */   
+       if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5]) return [gameBoard[3],3,4,5]
+       
+    }
+    
+    if(gameBoard[6]) {
+        /*
+        # # #
+        # # #
+        X X X
+        */   
+       if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8]) return [gameBoard[6],6,7,8]
+    }
+
+    if (checkTie()) return 'tie';
 }
 
 function checkStatus() {
-
-    if (checkTie()) return 'tie';
-
-    /*
-        # # #
-        # # #
-        # # #
-    */
-    if (gameBoard[0]) {
-    /*
-        X X X
-        # # #
-        # # #
-    */
-        if (gameBoard[0] === gameBoard[1] && gameBoard[0] === gameBoard[2]) return [gameBoard[0],0,1,2]
-    /*
-        X # #
-        X # #
-        X # #
-    */
-        if (gameBoard[0] === gameBoard[3] && gameBoard[0] === gameBoard[6]) return [gameBoard[0],0,3,6]
-    /*
-        X # #
-        # X #
-        # # X
-    */
-        if (gameBoard[0] === gameBoard[4] && gameBoard[0] === gameBoard[8]) return [gameBoard[0],0,4,8]
-    }
-
-    if (gameBoard[1]) {
-    /*
-        # X #
-        # X #
-        # X #
-    */
-        if (gameBoard[1] === gameBoard[4] && gameBoard[1] === gameBoard[7]) return [gameBoard[1],1,4,7]
-
-    if(gameBoard[2]) {
-    /*
-        # # X
-        # # X
-        # # X
-    */
-        if (gameBoard[2] === gameBoard[5] && gameBoard[2] === gameBoard[8]) return [gameBoard[2],2,5,8]
-
-    /*
-        # # X
-        # X #
-        X # #
-    */   
-        if (gameBoard[2] === gameBoard[4] && gameBoard[2] === gameBoard[6]) return [gameBoard[2],2,4,6]
-    }
-    
-
-    if(gameBoard[3]) {
-    /*
-        # # #
-        X X X
-        # # #
-    */   
-        if (gameBoard[3] === gameBoard[4] && gameBoard[3] === gameBoard[5]) return [gameBoard[3],3,4,5]
-    }
-
-    if(gameBoard[6]) {
-    /*
-        # # #
-        # # #
-        X X X
-    */   
-        if (gameBoard[6] === gameBoard[7] && gameBoard[6] === gameBoard[8]) return [gameBoard[6],6,7,8]
-    }
-    }
+    let status = checkForThree();
+    if (status) {
+        if (status === 'tie') {
+            declareTie()
+        }
+            if (status[0] === 'x' || status[0] === 'o') {
+                declareWinner(status)
+            }
+            gameEnds()
+        }
 }
+
+function squareFunctionality(square, i) {
+    markSquare(square, i);
+    switchPlayer()
+    render();
+    checkStatus();
+
+}
+
+function addSquareListener(square, i) {
+    square.addEventListener('click', function () {
+        squareFunctionality(square, i)
+    })
+}
+
 
 function render() {
     emptyBoard();
-
 
     for (let i = 0; i < 9; i++) {
         let square = createSquare();
@@ -180,29 +209,14 @@ function render() {
         if (gameBoard[i] === 'x') createX(square);
         if (gameBoard[i] === 'o') createO(square);
         
-        boardHTML.appendChild(square);
+        HTMLs.boardHTML.appendChild(square);
 
-        square.addEventListener('click', function () {
-            markSquare(square, i);
-            switchPlayer()
-            render();
-            let status = checkStatus();
-            console.log(status)
-            if (status) {
-                if (status === 'tie') {
-                    declareTie()
-                }
-                if (status[0] === 'x' || status[0] === 'o') {
-                    declareWinner(status)
-                }
-                
-            }
-
-        })
+        addSquareListener(square, i)
 
     }
 
 }
+
 newGame()
 
 let currentTurn = 1;
