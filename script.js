@@ -4,19 +4,20 @@
 
 const gameBoardModule = (() => {
 
+    let against;
+
     let currentTurn = 1;
 
     let gameBoard;
     
     let HTMLs = {
         boardHTML: document.querySelector('.board'),
-        newGameBtn: document.querySelector('.new-game-btn'),
         squares: document.querySelectorAll(".square"),
     }
     
-    HTMLs.newGameBtn.addEventListener('click', newGame)
     
-    function newGame() {
+    function newGame(type) {
+        against = type;
         resetBoard();
         render();
         highlightCurrentPlayer()
@@ -58,8 +59,41 @@ const gameBoardModule = (() => {
     }
     
     function switchPlayer() {
+        
         currentTurn === 1 ? currentTurn = 2 : currentTurn = 1;
+
+        
+            if (currentTurn === 2 && against === 'pc') {
+                computerPlays()
+                currentTurn = 1;
+            }
+        
+
         highlightCurrentPlayer()
+    }
+
+    function randomSquare() {
+        return Math.floor(Math.random() * 9)
+    }
+
+    function computerPlays() {
+
+        if (checkForThree()) return;
+        let square = randomSquare();
+        while (gameBoard[square] !== null && checkTie() !== 'tie') {
+            square = randomSquare();
+        }
+        gameBoard[square] = 'o';
+        console.log(square)        
+    }
+
+    function squareFunctionality(square, i) {
+        markSquare(square, i);
+        switchPlayer(against)
+        
+        render();
+        checkStatus();
+    
     }
     
     let playerHTMLs = document.querySelectorAll('.player')
@@ -77,15 +111,19 @@ const gameBoardModule = (() => {
             player1Title.classList.remove('current')
         }
     }
-    
+
+
+
     function markSquare(square, i) {
         if (square.textContent) return;
-    
+
+        
         if (currentTurn === 1) {
             gameBoard[i] = 'x';
         } else if (currentTurn === 2) {
             gameBoard[i] = 'o';
         }
+        
     }
     
     function checkTie() {
@@ -200,6 +238,7 @@ const gameBoardModule = (() => {
         if (checkTie()) return 'tie';
     }
     
+  
     function checkStatus() {
         let status = checkForThree();
         if (status) {
@@ -213,17 +252,18 @@ const gameBoardModule = (() => {
             }
     }
     
-    function squareFunctionality(square, i) {
-        markSquare(square, i);
-        switchPlayer()
-        render();
-        checkStatus();
-    
-    }
     
     function addSquareListener(square, i) {
         square.addEventListener('click', function () {
             squareFunctionality(square, i)
+            
+            // console.log(currentTurn)
+            // if (against === 'pc' && currentTurn === 2) {
+            //     computerPlays();
+            //     render();
+            //     switchPlayer();
+            // } 
+
         })
     }
     
@@ -250,12 +290,6 @@ const gameBoardModule = (() => {
 
 })();
 
-gameBoardModule.newGame()
-
-const Player = (name) => {
-
-}
-
 let player1Form;
 let player2Form;
 let player1Game = document.querySelector('.player.one');
@@ -280,9 +314,16 @@ function checkNameValidity(player) {
     return true;
 }
 
-function updateHTMLNames(player1, player2) {
+function updateHTMLNames(against) {
     player1Game.textContent = player1Form.value;
-    player2Game.textContent = player2Form.value;
+
+    if (against === 'pc') {
+        player2Game.textContent = 'Computer'
+    } else {
+
+        player2Game.textContent = player2Form.value;
+    }
+
 }
 
 function hideForm() {
@@ -290,21 +331,41 @@ function hideForm() {
     document.querySelector('.player-info').classList.add('hidden')
 }
 
-const playBtn = document.querySelector('.play-btn');
+let newGameBtn = document.querySelector('.new-game-btn');
+// newGameBtn.addEventListener('click', newGame);
 
-playBtn.addEventListener('click', function() {
+const playBtn2P = document.querySelector('.play-btn-2players');
+
+playBtn2P.addEventListener('click', function() {
 
     let [player1, player2] = getNames();
 
-    // if (!checkNameValidity(player1) && !checkNameValidity(player2)) return;
-
     let namesValid = (!checkNameValidity(player1) && !checkNameValidity(player2))
-    console.log(namesValid)
    
     if (!namesValid) {
         updateHTMLNames()
         hideForm()
+        gameBoardModule.newGame()
+        newGameBtn.addEventListener('click', gameBoardModule.newGame)
+    }
 
+})
+
+const playBtnPc = document.querySelector('.play-btn-pc');
+
+playBtnPc.addEventListener('click', function() {
+    let [player1, player2] = getNames();
+
+    let namesValid = (!checkNameValidity(player1) && !checkNameValidity(player2))
+   
+    if (!namesValid) {
+        newGameBtn.addEventListener('click', function() {
+            gameBoardModule.newGame('pc')
+        })
+        updateHTMLNames('pc')
+        hideForm()
+        gameBoardModule.newGame('pc')
+        
     }
 
 })
