@@ -290,83 +290,87 @@ const gameBoardModule = (() => {
 
 })();
 
-let player1Form;
-let player2Form;
-let player1Game = document.querySelector('.player.one');
-let player2Game = document.querySelector('.player.two');
-
-
-function getNames() {
-    player1Form = document.querySelector('#player1-name');
-    player2Form = document.querySelector('#player2-name');
-    return [player1Form, player2Form]
-}
-
-function checkNameValidity(player) {
-    if (player.value.length < 2 || player.value === 'TOO SHORT') {
-        player.value = 'TOO SHORT';
-        return false;
+const PreGameHTML = (() => {
+    let player1Form;
+    let player2Form;
+    let player1Game = document.querySelector('.player.one');
+    let player2Game = document.querySelector('.player.two');
+    
+    
+    function getNames() {
+        player1Form = document.querySelector('#player1-name');
+        player2Form = document.querySelector('#player2-name');
+        return [player1Form, player2Form]
     }
-    if (player.value.length > 16 || player.value === 'TOO LONG') {
-        player.value = 'TOO LONG';
-        return false
+    
+    function checkNameValidity(player) {
+        if (player.value.length < 2 || player.value === 'TOO SHORT') {
+            player.value = 'TOO SHORT';
+            return false;
+        }
+        if (player.value.length > 16 || player.value === 'TOO LONG') {
+            player.value = 'TOO LONG';
+            return false
+        }
+        return true;
     }
-    return true;
-}
-
-function updateHTMLNames(against) {
-    player1Game.textContent = player1Form.value;
-
-    if (against === 'pc') {
-        player2Game.textContent = 'Computer'
-    } else {
-
-        player2Game.textContent = player2Form.value;
+    
+    function updateHTMLNames(against) {
+        player1Game.textContent = player1Form.value;
+    
+        if (against === 'pc') {
+            player2Game.textContent = 'Computer'
+        } else {
+    
+            player2Game.textContent = player2Form.value;
+        }
+    
     }
-
-}
-
-function hideForm() {
-
-    document.querySelector('.player-info').classList.add('hidden')
-}
-
-let newGameBtn = document.querySelector('.new-game-btn');
-// newGameBtn.addEventListener('click', newGame);
-
-const playBtn2P = document.querySelector('.play-btn-2players');
-
-playBtn2P.addEventListener('click', function() {
-
-    let [player1, player2] = getNames();
-
-    let namesValid = (!checkNameValidity(player1) && !checkNameValidity(player2))
-   
-    if (!namesValid) {
-        updateHTMLNames()
-        hideForm()
-        gameBoardModule.newGame()
-        newGameBtn.addEventListener('click', gameBoardModule.newGame)
+    
+    function hideForm() {
+    
+        document.querySelector('.player-info').classList.add('hidden')
     }
-
-})
-
-const playBtnPc = document.querySelector('.play-btn-pc');
-
-playBtnPc.addEventListener('click', function() {
-    let [player1, player2] = getNames();
-
-    let namesValid = (!checkNameValidity(player1) && !checkNameValidity(player2))
-   
-    if (!namesValid) {
-        newGameBtn.addEventListener('click', function() {
+    
+    let newGameBtn = document.querySelector('.new-game-btn');
+    // newGameBtn.addEventListener('click', newGame);
+    
+    const playBtn2P = document.querySelector('.play-btn-2players');
+    
+    playBtn2P.addEventListener('click', function() {
+    
+        let [player1, player2] = getNames();
+    
+        let namesValid = (!checkNameValidity(player1) && !checkNameValidity(player2))
+       
+        if (!namesValid) {
+            updateHTMLNames()
+            hideForm()
+            gameBoardModule.newGame()
+            newGameBtn.addEventListener('click', gameBoardModule.newGame)
+        }
+    
+    })
+    
+    const playBtnPc = document.querySelector('.play-btn-pc');
+    
+    playBtnPc.addEventListener('click', function() {
+        let [player1, player2] = getNames();
+    
+        let namesValid = (!checkNameValidity(player1) && !checkNameValidity(player2))
+       
+        if (!namesValid) {
+            newGameBtn.addEventListener('click', function() {
+                gameBoardModule.newGame('pc')
+            })
+            updateHTMLNames('pc')
+            hideForm()
             gameBoardModule.newGame('pc')
-        })
-        updateHTMLNames('pc')
-        hideForm()
-        gameBoardModule.newGame('pc')
-        
-    }
+            
+        }
+    
+    })
+})();
 
-})
+
 
