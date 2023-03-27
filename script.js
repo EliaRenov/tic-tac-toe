@@ -88,7 +88,7 @@ const gameBoardModule = (() => {
     }
 
     function squareFunctionality(square, i) {
-        markSquare(square, i);
+        if (markSquare(square, i) === false) return;
         switchPlayer(against)
         
         render();
@@ -115,8 +115,7 @@ const gameBoardModule = (() => {
 
 
     function markSquare(square, i) {
-        if (square.textContent) return;
-
+        if (square.textContent) return false;
         
         if (currentTurn === 1) {
             gameBoard[i] = 'x';
